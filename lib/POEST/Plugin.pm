@@ -1,20 +1,36 @@
-# $Id: Plugin.pm,v 1.2 2003/03/22 17:06:17 cwest Exp $
+# $Id: Plugin.pm,v 1.3 2003/04/08 00:27:30 cwest Exp $
 package POEST::Plugin;
 
 use strict;
 $^W = 1;
 
 use vars qw[$VERSION];
-$VERSION = (qw$Revision: 1.2 $)[1];
+$VERSION = (qw$Revision: 1.3 $)[1];
 
 use POE qw[Component::Server::SMTP];
+use Carp;
+
+sub import {
+	my ($class)  = @_;
+	my ($caller) = (caller)[0];
+	
+	{
+		eval qq[
+			package $caller;
+			use POE qw[Component::Server::SMTP];
+			use Carp;
+			package $class;
+		];
+		croak $@ if $@;
+	}
+}
 
 sub CONFIG () { [ ] }
 
 sub new {
-  my ($class, %args) = @_;
+	my ($class, %args) = @_;
 
-  return bless \%args, $class;
+	return bless \%args, $class;
 }
 
 1;
@@ -104,7 +120,13 @@ sub-classing POEST::Plugin behind the scenes.
 Sub-classing is simple.
 
   package POEST::Plugin::Queue::mysql;
-  use base qw[POEST::Plugin];
+  use POEST::Plugin;
+  @ISA = qw[POEST::Plugin];
+
+This will give you the default constructor for configuring your plugin,
+as well as import the constants required for L<POE|POE>, and
+L<POE::Component::Server::SMTP|POE::Component::Server::SMTP>.  It will
+also import C<carp> and C<croak> from L<Carp|Carp>.
 
 =head2 Required Methods
 
@@ -154,7 +176,7 @@ needed.  Only the configuration parameters requested will be passed to
 the plugin upon initialization using the C<new()> constructor.
 
 Just as C<EVENTS()>, there are several options for declaring this method.
-Inline subroutines or the use of the C<constant|constant> pragma are
+Inline subroutines or the use of the L<constant|constant> pragma are
 acceptable.  Here is an example.
 
   sub CONFIG() { [ qw[hostname port aliases] ] }
@@ -216,6 +238,25 @@ Example.
     my $client = $heap->{client};
     $client->put( SMTP_OK, "Welcome." );
   }
+
+=head2 Life Enhancers
+
+=head3 POE::Sugar::Args
+
+In thinking about Plugins and how people would like to write them, I
+came to the conclusion that not a lot of people like the POE state
+interface of taking slices on C<@_>.  Even though the current method
+is the fastest Perl allows, some people want syntactic sugar, enter
+L<POE::Sugar::Args|POE::Sugar::Args>.  This module exports a single
+function that should take some of the headache away.  Here is example
+usage.
+
+  sub HELO {
+    my $poe = sweet_args;
+    
+    $poe->heap->{client}->put( SMTP_OK, "Hi there!" );
+  }
+
 
 =head1 AUTHOR
 

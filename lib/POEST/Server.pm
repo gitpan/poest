@@ -1,4 +1,4 @@
-# $Id: Server.pm,v 1.2 2003/03/22 17:06:17 cwest Exp $
+# $Id: Server.pm,v 1.3 2003/04/08 00:27:30 cwest Exp $
 package POEST::Server;
 
 =pod
@@ -6,6 +6,15 @@ package POEST::Server;
 =head1 NAME
 
 POEST::Server - The Poest Master General
+
+=head1 SYNOPSIS
+
+ my $server = POEST::Server->new(
+   Config     => 'POEST::Config::Genearl',
+   ConfigFile => '/etc/poest.conf',
+ );
+ 
+ $server->start;
 
 =head1 ABSTRACT
 
@@ -22,7 +31,7 @@ $^W = 1;
 $0  = 'poest';
 
 use vars qw[$VERSION];
-$VERSION = (qw$Revision: 1.2 $)[1];
+$VERSION = (qw$Revision: 1.3 $)[1];
 
 use POE qw[Component::Server::SMTP];
 use Carp;
@@ -89,7 +98,7 @@ sub new {
 
 =head2 run()
 
-Make the server run.  This will block in execution when called directly.
+Make the server run.  This will block execution when called directly.
 
 =cut
 

@@ -1,11 +1,11 @@
-# $Id: Config.pm,v 1.2 2003/03/22 17:06:17 cwest Exp $
+# $Id: Config.pm,v 1.3 2003/04/08 00:27:30 cwest Exp $
 package POEST::Config;
 
 use strict;
 $^W = 1;
 
 use vars qw[$VERSION];
-$VERSION = (qw$Revision: 1.2 $)[1];
+$VERSION = (qw$Revision: 1.3 $)[1];
 
 sub new {
 	my ($class, %args) = @_;
@@ -57,9 +57,8 @@ Details for writing a plugin configurator.
 poest needs to be configured.  Yes folks, that means writing (or at
 least editing) a configuration of some sort.  I say "of some sort"
 because there may be lots of different approaches to configuration.
-The default configuration setup uses L<Config::General|Config::General>,
-and is called C<POEST::Config::General|POEST::Config::General>.  This
-is also the reference implementation.
+This is the default configuration method.  This is also the
+reference implementation.
 
 =head2 Conventions
 
@@ -117,7 +116,7 @@ it is only used in one place, server initialization.
 
 C<new()> is the constructor.  Arguments are passed to C<new()> as a list
 of key/value pairs.  Any arguments recieved by C<new()> were what was
-passes directly to C<POEST::Server-&gt;new()>.  Arguments must be validated
+passes directly to C<POEST::Server-E<gt>new()>.  Arguments must be validated
 and checked for accuracy, and existence.  If something is wrong, an
 exception should be thrown.  This will end the server initialization and
 terminate the server so the problem can be fixed.

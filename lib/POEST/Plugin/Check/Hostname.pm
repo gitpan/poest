@@ -1,4 +1,4 @@
-# $Id: Hostname.pm,v 1.2 2003/03/22 17:06:17 cwest Exp $
+# $Id: Hostname.pm,v 1.3 2003/04/08 00:27:30 cwest Exp $
 package POEST::Plugin::Check::Hostname;
 
 =pod
@@ -18,11 +18,11 @@ Check for a proper host in the HELO command sent from the client.
 use strict;
 $^W = 1;
 
-use vars qw[$VERSION];
-$VERSION = (qw$Revision: 1.2 $)[1];
+use vars qw[$VERSION @ISA];
+$VERSION = (qw$Revision: 1.3 $)[1];
 
-use base qw[POEST::Plugin];
-use POE qw[Component::Server::SMTP];
+use POEST::Plugin;
+@ISA = qw[POEST::Plugin];
 
 =head2 Events
 
@@ -34,9 +34,13 @@ the host specified.  If said host is in the list, execution will
 continue on to the standard HELO implementation that greets the client.
 If it fails, an error will be sent to the client.
 
+=head3 ELOH
+
+Same as C<HELO>.
+
 =cut
 
-sub EVENTS () { [ qw[ HELO ] ] }
+sub EVENTS () { [ qw[ HELO ELOH] ] }
 
 =head2 Configuration
 
@@ -55,8 +59,9 @@ this SMTP server.
 
 sub CONFIG () { [ qw[ requirehost allowedhost ] ] }
 
-sub HELO {
-	my ($kernel, $heap, $self, $session, $host) = @_[KERNEL, HEAP, OBJECT, SESSION, ARG0];
+*HELO = *ELOH = sub {
+	my ($kernel, $heap, $self, $session, $cmd, $host)
+		= @_[KERNEL, HEAP, OBJECT, SESSION, ARG0, ARG1];
 	my $client = $heap->{client};
 
 	if ( $self->{requirehost} ) {
@@ -64,11 +69,11 @@ sub HELO {
 			@{ $self->{allowedhost} } : $self->{allowedhost};
 
 		unless ( $host && grep { $host eq $_ } @hosts ) {
-			$client->put( SMTP_ARG_SYNTAX_ERROR, qq[Syntax: HELO hostname] );
+			$client->put( SMTP_ARG_SYNTAX_ERROR, qq[Syntax: $cmd hostname] );
 			$session->stop;
 		}
 	}
-}
+};
 
 1;
 

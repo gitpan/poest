@@ -1,5 +1,30 @@
-#!/usr/bin/perl
-# $Id: poest,v 1.3 2003/03/22 17:07:22 cwest Exp $
+#!/usr/bin/env perl
+# $Id: poest.PL,v 1.1 2003/04/08 00:27:30 cwest Exp $
+
+#!/usr/bin/env perl
+
+use Config;
+use File::Basename qw[basename dirname];
+use Cwd;
+
+my $origdir = cwd;
+chdir dirname $0;
+my $file = basename( $0, '.PL' );
+$file .= '.com' if $^O eq 'VMS';
+
+open OUT, "> $file" or die "Can't create $file: $!";
+
+print OUT <<HEADER, do{ local $/ = undef; <DATA> };
+#!$Config{perlpath}
+HEADER
+
+close OUT;
+
+chmod 0755, $file;
+
+chdir $origdir;
+
+__END__
 use strict;
 $^W = 1;
 
@@ -11,7 +36,7 @@ use POEST::Server;
 
 use vars qw[$VERSION];
 
-$VERSION = '0.01_02pre-alpha';
+$VERSION = '0.01_03pre-alpha';
 
 =head1 NAME
 
@@ -68,7 +93,7 @@ sub stop {
 =head2 run
 
 Run poest in the forground.  No pid file will be created, no forking
-will be done.  STD* will remain open.
+will be done.  C<STD*> will remain open.
 
 =cut
 

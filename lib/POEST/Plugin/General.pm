@@ -1,4 +1,4 @@
-# $Id: General.pm,v 1.2 2003/03/22 17:06:17 cwest Exp $
+# $Id: General.pm,v 1.3 2003/04/08 00:27:30 cwest Exp $
 package POEST::Plugin::General;
 
 =pod
@@ -22,17 +22,25 @@ to implement, they are implemented here.
 use strict;
 $^W = 1;
 
-use vars qw[$VERSION];
-$VERSION = (qw$Revision: 1.2 $)[1];
+use vars qw[$VERSION @ISA];
+$VERSION = (qw$Revision: 1.3 $)[1];
 
-use base qw[POEST::Plugin];
-use POE qw[Component::Server::SMTP];
+use POEST::Plugin;
+@ISA = qw[POEST::Plugin];
 
 =head2 Events
 
 =head3 HELO
 
 Returns the response for C<HELO>.
+
+=head3 ELOH
+
+Returns a simple "Ok" response to C<ELOH>.
+
+=head3 NOOP
+
+Returns the response for C<NOOP>.
 
 =head3 QUIT
 
@@ -45,7 +53,7 @@ is how an SMTP server introduces itself to the client.
 
 =cut
 
-sub EVENTS () { [ qw[ HELO  QUIT send_banner ] ] }
+sub EVENTS () { [ qw[ HELO  ELOH NOOP QUIT send_banner ] ] }
 
 =head2 Configuration
 
@@ -68,17 +76,30 @@ sub send_banner {
 }
 
 sub HELO {
-	my ($kernel, $self, $heap, $host) = @_[KERNEL, OBJECT, HEAP, ARG0];
+	my ($kernel, $self, $heap) = @_[KERNEL, OBJECT, HEAP];
 	my $client = $heap->{client};
 
-	$client->put( SMTP_OK, qq[$self->{hostname} Would you like to play a game?] );
+	$client->put( SMTP_OK, qq[$self->{hostname} Ok] );
+}
+
+sub ELOH {
+	my ($kernel, $self, $heap) = @_[KERNEL, OBJECT, HEAP];
+	my $client = $heap->{client};
+	
+	$client->put( SMTP_OK, qq[$self->{hostname} Ok] );
+}
+
+sub NOOP {
+	my $client = $_[HEAP]->{client};
+
+	$client->put( SMTP_OK, q[Ok] );
 }
 
 sub QUIT {
 	my ($kernel, $heap) = @_[KERNEL, HEAP];
 	my $client = $heap->{client};
 
-	$client->put( SMTP_QUIT, q[How about a nice game of chess?] );
+	$client->put( SMTP_QUIT, q[Bye!] );
 	$heap->{shutdown_now} = 1;
 }
 

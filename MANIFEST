@@ -9,7 +9,8 @@ QUOTES
 README
 TODO
 bin/cvs-log.perl
-bin/poest
+bin/poest.PL
+bin/test_run.sh
 etc/poest.config.general
 lib/POEST/Config.pm
 lib/POEST/Config/General.pm

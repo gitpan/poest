@@ -23,12 +23,12 @@ be a quick explination here.
 
 =head3 HELO
 
-ARG0 is the host passed by the client, if there is one.
+C<ARG0> is the host passed by the client, if there is one.
 
 =head3 QUIT
 
 The client has decided to close the connection.  A handler for this
-method should set C<$heap-&gt;{shutdown}> to a true value.  This will
+method should set C<$heap-E<gt>{shutdown}> to a true value.  This will
 tell the server to shutdown the connection.
 
 =head2 Special SMTP Events

@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# $Id: Build.PL,v 1.2 2003/03/22 17:06:16 cwest Exp $
+# $Id: Build.PL,v 1.4 2003/04/08 01:12:23 cwest Exp $
 use strict;
 $^W = 1;
 use Module::Build;
@@ -17,7 +17,7 @@ Module::Build->new(
 	requires          => {
 		'perl'                         => '5.5.3',
 		'POE'                          => '0.25',
-		'POE::Component::Server::SMTP' => 0,
+		'POE::Component::Server::SMTP' => 1.4,
 		'POE::Session::MultiDispatch'  => 0,
 	},
 	recommends        => {
@@ -29,5 +29,9 @@ Module::Build->new(
 	scripts                            => [ qw[
 		bin/poest
 	] ],
+	PL_files          => { qw[bin/poest.PL bin/poest] },
 	sign              => 1,
 )->create_build_script;
+
+print "Gengerating bin/poest from bin/poest.PL\n";
+system($^X, 'bin/poest.PL');
