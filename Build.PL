@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# $Id: Build.PL,v 1.1 2003/03/12 20:42:39 cwest Exp $
+# $Id: Build.PL,v 1.2 2003/03/22 17:06:16 cwest Exp $
 use strict;
 $^W = 1;
 use Module::Build;
@@ -15,18 +15,18 @@ Module::Build->new(
 	},
 	license           => 'perl',
 	requires          => {
-		perl                         => '5.5.3',
-		POE                          => '0.25',
-		POE::Component::Server::SMTP => 0,
-		POE::Session::MultiDispatch  => 0,
+		'perl'                         => '5.5.3',
+		'POE'                          => '0.25',
+		'POE::Component::Server::SMTP' => 0,
+		'POE::Session::MultiDispatch'  => 0,
 	},
 	recommends        => {
-		Config::General => 0,
+		'Config::General'              => 0,
 	},
 	build_requires    => {
-		Test::More    => 0,
+		'Test::More'                   => 0,
 	},
-	scripts           => [ qw[
+	scripts                            => [ qw[
 		bin/poest
 	] ],
 	sign              => 1,

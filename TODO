@@ -1,4 +1,9 @@
-# $Id: TODO,v 1.1 2003/03/12 20:42:39 cwest Exp $
+# $Id: TODO,v 1.2 2003/03/22 17:06:16 cwest Exp $
+
+For next release.
+
+- Clean up docs.  &gt; is not E<gt>, for example. Also see C<<>>.
+- bin/poest should be built by bin/poest.PL.
 
 Nearly everything.  But the plate kind of looks like this.
 

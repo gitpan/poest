@@ -1,4 +1,4 @@
-# $Id: Server.pm,v 1.1 2003/03/12 20:42:39 cwest Exp $
+# $Id: Server.pm,v 1.2 2003/03/22 17:06:17 cwest Exp $
 package POEST::Server;
 
 =pod
@@ -22,7 +22,7 @@ $^W = 1;
 $0  = 'poest';
 
 use vars qw[$VERSION];
-$VERSION = (qw$Revision: 1.1 $)[1];
+$VERSION = (qw$Revision: 1.2 $)[1];
 
 use POE qw[Component::Server::SMTP];
 use Carp;
@@ -172,6 +172,8 @@ sub stop {
 		close PID or die "Can't close $self->{conf}->{pidfile}: $!\n";
 		unlink $self->{conf}->{pidfile}
 			or die "Can't unlink $self->{conf}->{pidfile}: $!\n";
+	} elsif ( $self->{pid} ) {
+		# Cool.
 	} else {
 		croak "PID file was not specified in the configuration."
 	}
@@ -209,13 +211,22 @@ module that contains the plugin class.
 
 =head1 AUTHOR
 
-Casey West, <F<casey@geeknest.com>>
+Casey West, <F<casey@dyndns.org>>
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2003 Casey West.  All rights reserved.  This program is
-free software; you may redistribute it and/or modify it under the same
-terms as Perl itself.
+Copyright 2003 DynDNS.org
+
+You may distribute this package under the terms of either the GNU
+General Public License or the Artistic License, as specified in the Perl
+README file, with the exception that it may not be placed on physical
+media for distribution without the prior written approval of the author.
+
+THIS PACKAGE IS PROVIDED WITH USEFULNESS IN MIND, BUT WITHOUT GUARANTEE
+OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. USE IT AT YOUR
+OWN RISK.
+
+For more information, please visit http://opensource.dyndns.org
 
 =head1 SEE ALSO
 
