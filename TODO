@@ -1,0 +1,10 @@
+# $Id: TODO,v 1.1 2003/03/12 20:42:39 cwest Exp $
+
+Nearly everything.  But the plate kind of looks like this.
+
+- Tests can start and stop servers with custom configurations.
+- Test running server.
+- Accept messages.
+- Queue messages.
+- Send messages via SMTP.
+- Everything else.

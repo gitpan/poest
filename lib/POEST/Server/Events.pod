@@ -1,0 +1,62 @@
+=pod
+
+=head1 NAME
+
+POEST::Server::Events - Document all the standard events.
+
+=head1 ABSTRACT
+
+Comprehensive documentation on all the standard events.  These are the
+basic events that a standard SMTP server should implement.
+
+
+=head1 DESCRIPTION
+
+Lots of events are created by the poest server.  We should probably
+write them down for someone, perhaps even you!
+
+=head2 SMTP Events
+
+SMTP events are only self explainitory to people who understand SMTP
+commands.  Of course, RFC 2821 can help with that, but there should
+be a quick explination here.
+
+=head3 HELO
+
+ARG0 is the host passed by the client, if there is one.
+
+=head3 QUIT
+
+The client has decided to close the connection.  A handler for this
+method should set C<$heap-&gt;{shutdown}> to a true value.  This will
+tell the server to shutdown the connection.
+
+=head2 Special SMTP Events
+
+=head3 send_banner
+
+This event is called as soon as a connection is established.  An SMTP
+server sends a banner to tell the client who it is, that's what we
+do here.
+
+=head2 POEST::Plugin::Accept Events
+
+=head2 POEST::Plugin::Queue Events
+
+=head2 POEST::Plugin::Deliver Events
+
+=head1 AUTHOR
+
+Casey West, <F<casey@geeknest.com>>
+
+=head1 COPYRIGHT
+
+Copyright (c) 2003 Casey West.  All rights reserved.  This program is
+free software; you may redistribute it and/or modify it under the same
+terms as Perl itself.
+
+=head1 SEE ALSO
+
+L<perl>, L<POEST::Server>.
+
+=cut

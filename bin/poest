@@ -1,0 +1,122 @@
+#!/usr/bin/perl
+# $Id: poest,v 1.1 2003/03/12 20:42:39 cwest Exp $
+use strict;
+$^W = 1;
+
+use Getopt::Std;
+use Carp;
+
+use lib qw[lib ../lib];
+use POEST::Server;
+
+use vars qw[$VERSION];
+
+$VERSION = '0.01_01pre-alpha';
+
+=head1 NAME
+
+poest - Perl and POE based SMTP Server
+
+=head1 SYNOPSIS
+
+ poest start Config POEST::Config::General ConfigFile /etc/poest.conf
+
+=head1 CONFIGURATION
+
+All configuration parameters are passed on the command line after
+the command.  They are passed as is to the contructor for
+L<POEST::Server|POEST::Server>.
+
+=head1 COMMANDS
+
+=cut
+
+my @commands = qw[start stop run usage help];
+
+my $command = shift;
+
+usage() unless $command && grep { $_ eq $command } @commands;
+
+DOIT: {
+	no strict 'refs';
+	&{ $command };
+	exit(0);
+}
+
+=head2 start
+
+Start and fork the daemon.
+
+=back
+
+=cut
+
+sub start {
+	my $poest = POEST::Server->new( @ARGV )->start;
+}
+
+=head2 stop
+
+Stop the daemon.
+
+=cut
+
+sub stop {
+	POEST::Server->new( @ARGV )->stop;
+}
+
+=head2 run
+
+Run poest in the forground.  No pid file will be created, no forking
+will be done.  STD* will remain open.
+
+=cut
+
+sub run {
+	POEST::Server->new( @ARGV )->run;
+}
+
+=head2 usage
+
+Shows usage.  For more detail see help.
+
+=cut
+
+sub usage {
+    my $commands = join '|', @commands;
+	print "poest $commands [args ...]\n";
+	exit(0);
+}
+
+=head2 help
+
+Detailed usage instructions.
+
+=cut
+
+sub help {
+  system( "perldoc $0" );
+  exit(0);
+}
+
+1;
+
+__END__
+
+=pod
+
+=head1 AUTHOR
+
+Casey West, <F<casey@geeknest.com>>
+
+=head1 COPYRIGHT
+
+Copyright (c) 2003 Casey West.  All rights reserved.  This program is
+free software; you may redistribute it and/or modify it under the same
+terms as Perl itself.
+
+=head1 SEE ALSO
+
+L<perl>, L<POEST::Server>.
+
+=cut

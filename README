@@ -1,0 +1,16 @@
+# $Id: README,v 1.1 2003/03/12 20:42:39 cwest Exp $
+
+poest - A Perl (and POE) based SMTP Server.
+
+Warning
+
+This is very early, pre-pre-alpha code.  You should only be looking
+at this if you're really that interested.  Are you?  I'm not sure you
+are.  If you are, patches and ideas welcome.
+
+Installation
+
+  perl ./Build.PL
+  ./Build
+  ./Build test
+  ./Build install
